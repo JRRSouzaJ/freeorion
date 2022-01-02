@@ -364,6 +364,23 @@ def generateOrders():  # pylint: disable=invalid-name
         except Exception as e:
             error("Exception %s while trying to %s" % (e, action.__name__), exc_info=True)
 
+    # demo getting and iterating over effect accounting information.
+    # must have first run meter update
+    accounting_info = fo.getUniverse().effectAccounting
+    debug("meter-effect accounting:")
+    for universe_object in accounting_info:
+        debug("object id: " + str(universe_object.key()))
+        for meter in universe_object.data():
+            debug("  meter type: " + str(meter.key()))
+            for effect in meter.data():
+                debug("    effect:")
+                debug("      causeType: " + str(effect.causeType))
+                debug("      specificCause: " + str(effect.specificCause))
+                debug("      customLabel: " + str(effect.customLabel))
+                debug("      sourceID: " + str(effect.sourceID))
+                debug("      meterChange: " + str(effect.meterChange))
+                debug("      meterRunningTotal: " + str(effect.meterRunningTotal))
+
     aistate.last_turn_played = fo.currentTurn()
     generate_order_timer.stop_print_and_clear()
     turn_timer.stop_print_and_clear()
